@@ -1,0 +1,19 @@
+# Trigger do MS-SQL (válido também para Azure SQL)
+# https://keda.sh/docs/2.14/scalers/mssql/
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: workertests-sqlserver-scaledobject
+spec:
+  pollingInterval: 20
+  minReplicaCount: 1
+  maxReplicaCount: 10
+  scaleTargetRef:
+    name: workertests-sqlserver
+  triggers:
+  - type: mssql
+    metadata:
+      connectionStringFromEnv: ConnectionStrings__BaseContagem
+      query: "SELECT COUNT(1) FROM dbo.ScalabilitySimulation"
+      targetValue: "50"
+      activationTargetValue: '1'

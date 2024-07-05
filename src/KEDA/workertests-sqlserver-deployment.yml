@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: workertests-sqlserver
+spec:
+  selector:
+    matchLabels:
+      app: workertests-sqlserver
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: workertests-sqlserver
+    spec:
+      containers:
+        - name: sitecontagem
+          image: renatogroffe/workertests-dotnet8:2
+          env:
+          - name: ConnectionStrings__BaseContagem
+            valueFrom:
+              secretKeyRef:
+                name: workertests-sqlserver-secret
+                key: ConnectionSqlServer
